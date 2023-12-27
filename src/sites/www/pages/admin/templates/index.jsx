@@ -1,7 +1,7 @@
 import checkAuth  from "~/layout/checkAuth"
 import { dmsPageFactory, registerDataType } from "~/modules/dms/src"
 import { withAuth } from "~/modules/ams/src" 
-//import { menuItems } from "../index"
+
 
 
 
@@ -9,8 +9,9 @@ import templateConfig from '~/modules/dms/src/patterns/page/template/templatesCo
 // import templatesConfig from './templatesConfig'
 
 
-import Selector from "~/sites/www/pages/cms/dms/selector"
+import Selector, { registerComponents } from "~/modules/dms/src/patterns/page/selector"
 registerDataType("selector", Selector)
+
 
 export default { 
   ...dmsPageFactory(templateConfig({ 
@@ -21,9 +22,8 @@ export default {
   }), "/admin/templates/",  withAuth),
   name: "Templates",
   sideNav: {
-    size: "none", //"compact",
-    // color: 'white',
-    // menuItems
+    size: "compact",
+    color: 'white',
   },
   topNav: {
     position: 'fixed'

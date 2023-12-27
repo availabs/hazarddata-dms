@@ -7,9 +7,12 @@ import AuthMenu from "~/pages/Auth/AuthMenu"
 
 
 import siteConfig from '~/modules/dms/src/patterns/page/siteConfig'
+import ComponentRegistry from '~/component_registry'
+import Selector, { registerComponents } from "~/modules/dms/src/patterns/page/selector"
 
-import Selector from "./dms/selector"
+registerComponents(ComponentRegistry)
 registerDataType("selector", Selector)
+
 
 export default { 
   ...dmsPageFactory(siteConfig({ 

@@ -1,6 +1,6 @@
 [submodule "src/modules/avl-falcor"]
 	path = src/modules/avl-falcor
-	url = git@github.com:availabs/avl-falcor.git
+	url = git@github.com:availabs/avl-falcor
 [submodule "src/modules/avl-components"]
 	path = src/modules/avl-components
 	url = git@github.com:availabs/avl-components.git
@@ -12,13 +12,13 @@
 	url = git@github.com:availabs/ams.git
 [submodule "src/modules/avl-graph"]
 	path = src/modules/avl-graph
-	url = git@github.com:availabs/avl-graph.git
+	url = git@github.com:availabs/avl-graph
 [submodule "src/pages/DataManager"]
 	path = src/pages/DataManager
 	url = git@github.com:availabs/DataManagerClient.git
 [submodule "src/modules/avl-maplibre"]
 	path = src/modules/avl-maplibre
-	url = git@github.com:availabs/avl-maplibre.git
+	url = git@github.com:availabs/avl-maplibre
 [submodule "src/modules/avl-map-2"]
 	path = src/modules/avl-map-2
-	url = git@github.com:availabs/avl-map-2.git
+	url = git@github.com:availabs/avl-map-2
