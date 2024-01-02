@@ -16,7 +16,7 @@ registerDataType("selector", Selector)
 export default { 
   ...dmsPageFactory(templateConfig({ 
     app: "dms-site",
-    type: "format-page",
+    type: "format-page-ctp",
     baseUrl: "/admin/templates",
     checkAuth
   }), "/admin/templates/",  withAuth),
