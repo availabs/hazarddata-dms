@@ -205,7 +205,7 @@ async function getData({
         return JSON.stringify({
             aggregatedLen: Boolean(groupBy.length),
             filter: {
-                ...geoAttribute && {[`substring(${geoAttribute}::text, 1, ${geoid?.toString()?.length})`]: [geoid]},
+                ...geoAttribute && geoid && {[`substring(${geoAttribute}::text, 1, ${geoid?.toString()?.length})`]: [geoid]},
             },
             exclude: {
                 ...notNull.length && notNull.reduce((acc, col) => ({...acc, [col]: ['null']}), {}) // , '', ' ' error out for numeric columns.
