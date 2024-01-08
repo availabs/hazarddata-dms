@@ -17,6 +17,7 @@ export default {
   ...dmsPageFactory(templateConfig({ 
     app: "dms-site",
     type: "format-page-ctp",
+    target: ['dms-site+docs-ctp'],
     baseUrl: "/admin/templates",
     checkAuth
   }), "/admin/templates/",  withAuth),

@@ -13,7 +13,7 @@ const handleSearch = (text, selected, setSelected) => {
 
 const onChangeFilter = (selected, setSelected, value, geoData, navigate, onChange) => {
   const geoid = get(selected, [0, 'geoid']);
-  if(geoid){
+  if(geoid || geoid === ''){
     setSelected(selected);
     onChange ? onChange(geoid) : navigate(`/geography/${geoid}`)
   }else{
@@ -77,7 +77,10 @@ const getCountyData = async ({ falcor, pgEnv, statesData, setGeoData }) => {
       })
 
     geoData.push(...statesData.map(sd => ({geoid: sd.geoid, name: `${sd.name} State`})))
-    setGeoData(geoData)
+
+      geoData.push({geoid: '', name: 'United States'})
+
+      setGeoData(geoData)
   }
 }
 
