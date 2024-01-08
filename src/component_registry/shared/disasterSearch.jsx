@@ -16,7 +16,7 @@ const onChangeFilter = (selected, setSelected, view_id, views, navigate, onChang
     console.log('changed', id)
     // if (id) {
         setSelected(selected);
-        onChange && onChange(id)
+        onChange ? onChange(id): navigate(`/disaster/${id}`)
     // } else {
     //     setSelected([])
     // }
@@ -42,7 +42,8 @@ export default ({
                     value,
                     geoid,
                     onChange,
-                    showAll = false
+                    showAll = false,
+                    showLabel = true
                 }) => {
     const navigate = useNavigate();
     const {falcor, falcorCache} = useFalcor();
@@ -57,10 +58,10 @@ export default ({
             "incident_type",
         ],
         disasterDetailsOptions = JSON.stringify({
-            filter: {
+            filter: geoid ? {
                 [geoid?.length === 2 ? 'fips_state_code' :
                         'fips_state_code || fips_county_code' ]: [geoid]
-            },
+            } : {},
             exclude: {
                 'disaster_number': range(3000, 3999)
             }
@@ -99,28 +100,37 @@ export default ({
         setSelected(disasters.filter(gd => value && gd.key === value))
     }, [disasters, value]);
 
+    const SearchBar = () => (
+        <>
+            <i className={`fa fa-search font-light text-xl bg-white pr-2 pt-1 rounded-r-md`}/>
+            <AsyncTypeahead
+                className={'w-full'}
+                isLoading={false}
+                onSearch={handleSearch}
+                minLength={0}
+                id="geography-search"
+                key="geography-search"
+                placeholder="Search for a FEMA Disaster..."
+                options={disasters}
+                labelKey={(option) => `${option?.label}`}
+                defaultSelected={selected}
+                onChange={(selected) => onChangeFilter(selected, setSelected, view_id, disasters, navigate, onChange)}
+                selected={selected}
+                inputProps={{className: 'bg-white w-full p-1 pl-3 rounded-l-md'}}
+                renderMenu={renderMenu}
+            />
+        </>
+    )
     return (
-        <div className={'flex justify-between'}>
-            <label className={'shrink-0 pr-2 py-1 my-1 w-1/4'}>FEMA Disaster:</label>
-            <div className={`flex flex row ${className} w-full shrink my-1`}>
-                <i className={`fa fa-search font-light text-xl bg-white pr-2 pt-1 rounded-r-md`}/>
-                <AsyncTypeahead
-                    className={'w-full'}
-                    isLoading={false}
-                    onSearch={handleSearch}
-                    minLength={0}
-                    id="geography-search"
-                    key="geography-search"
-                    placeholder="Search for a FEMA Disaster..."
-                    options={disasters}
-                    labelKey={(option) => `${option?.label}`}
-                    defaultSelected={selected}
-                    onChange={(selected) => onChangeFilter(selected, setSelected, view_id, disasters, navigate, onChange)}
-                    selected={selected}
-                    inputProps={{className: 'bg-white w-full p-1 pl-3 rounded-l-md'}}
-                    renderMenu={renderMenu}
-                />
+            showLabel ?
+                <div className={'flex flex-row flex-wrap justify-between'}>
+                    <label className={'shrink-0 pr-2 py-1 my-1 w-1/4'}>FEMA Disaster:</label>
+                    <div className={`flex flex row ${className} w-3/4 shrink my-1`}>
+                        <SearchBar />
+                    </div>
+                </div>:
+            <div className={`flex flex-row ${className} shrink my-1`}>
+                <SearchBar />
             </div>
-        </div>
     )
 }

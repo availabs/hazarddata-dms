@@ -84,7 +84,8 @@ const getCountyData = async ({ falcor, pgEnv, statesData, setGeoData }) => {
 export default ({
                          className,
                          value,
-                         onChange // if not passed, navigate to geography page
+                         onChange, // if not passed, navigate to geography page
+                         showLabel = true
 }) => {
   const navigate = useNavigate();
   const { falcor, falcorCache } = useFalcor();
@@ -104,10 +105,8 @@ export default ({
     setSelected(geoData.filter(gd => value && gd.geoid === value))
   }, [geoData, value]);
 
-  return (
-      <div className={'flex flex-row flex-wrap justify-between'}>
-        <label className={'shrink-0 pr-2 py-1 my-1 w-1/4'}>Geography:</label>
-        <div className={`flex flex row ${className} w-3/4 shrink my-1`}>
+  const SearchBar = () => (
+      <>
           <i className={`fa fa-search font-light text-xl bg-white pr-2 pt-1 rounded-r-md`} />
           <AsyncTypeahead
               className={'w-full'}
@@ -125,7 +124,18 @@ export default ({
               inputProps={{ className: 'bg-white  w-full p-1 pl-3 rounded-l-md' }}
               renderMenu={renderMenu}
           />
-        </div>
-      </div>
+      </>
+  )
+  return (
+      showLabel ?
+          <div className={'flex flex-row flex-wrap justify-between'}>
+            <label className={'shrink-0 pr-2 py-1 my-1 w-1/4'}>Geography:</label>
+            <div className={`flex flex-row ${className} w-3/4 shrink my-1`}>
+              <SearchBar />
+            </div>
+          </div> :
+          <div className={`flex flex-row ${className} shrink my-1`}>
+            <SearchBar />
+          </div>
   )
 }

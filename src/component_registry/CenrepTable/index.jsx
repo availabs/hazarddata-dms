@@ -10,7 +10,9 @@ import {Loading} from "~/utils/loading.jsx";
 import {RenderColumnControls} from "../shared/columnControls.jsx";
 import {addTotalRow} from "../utils/addTotalRow.js";
 import {Switch} from "@headlessui/react";
-import {defaultOpenOutAttributes, getNestedValue} from "../FormsTable/utils.js";
+import DisasterSearch from "../shared/disasterSearch.jsx";
+
+const getNestedValue = (obj) => typeof obj?.value === 'object' ? getNestedValue(obj.value) : obj?.value || obj;
 
 const isValid = ({groupBy, fn, columnsToFetch}) => {
     const fns = columnsToFetch.map(ctf => ctf.includes(' AS') ? ctf.split(' AS')[0] : ctf.split(' as')[0]);
@@ -94,7 +96,7 @@ const assignMeta = ({
                         fn,
                         notNull,
                         geoAttribute,
-                        geoid,
+                        geoid, disasterNumber,
                         metaLookupByViewId,
                         columns
                     }, falcor) => {
@@ -107,7 +109,8 @@ const assignMeta = ({
         );
 
     if(metaLookupCols?.length){
-        return handleExpandableRows(Object.values(get(falcorCache, dataPath(options({groupBy, notNull, geoAttribute, geoid})), {}))
+        return handleExpandableRows(
+            Object.values(get(falcorCache, dataPath(options({groupBy, notNull, geoAttribute, geoid})), {}))
             .map(row => {
                 metaLookupCols.forEach(mdC => {
                     const currentMetaLookup = parseJson(mdC.meta_lookup);
@@ -125,21 +128,39 @@ const assignMeta = ({
                     }
                 })
                 return row;
-            }), columns)
+            }),
+            columns,
+            fn,
+            disasterNumber
+        )
     }
 
-    return handleExpandableRows(Object.values(get(falcorCache, dataPath(options({groupBy, notNull, geoAttribute, geoid})), {})), columns)
+    return handleExpandableRows(
+        Object.values(get(falcorCache, dataPath(options({groupBy, notNull, geoAttribute, geoid})), {})),
+        columns,
+        fn,
+        disasterNumber
+    )
 
 }
 
-const handleExpandableRows = (data, columns) => {
+const handleExpandableRows = (data, columns, fn, disasterNumber) => {
     const expandableColumns = columns.filter(c => c.openOut);
+    const disasterNumberCol = (fn['disaster_number'] || 'disaster_number');
+    // if disaster number is being used to filter data, it should be in visible columns. Hide it if not needed.
+
     if (expandableColumns?.length) {
         const newData = data.map(row => {
             const newRow = {...row}
             newRow.expand = []
             newRow.expand.push(
-                ...expandableColumns.map(col => {
+                ...expandableColumns
+                    .filter(col => col.name !== disasterNumberCol ||
+                        (
+                            !disasterNumber ||
+                            (disasterNumber && getNestedValue(row[col.accessor]) && getNestedValue(row[col.accessor])?.includes(disasterNumber))
+                        ))
+                    .map(col => {
                     const value = getNestedValue(row[col.accessor]);
 
                     return {
@@ -152,23 +173,35 @@ const handleExpandableRows = (data, columns) => {
             )
             expandableColumns.forEach(col => delete newRow[col.accessor])
             return newRow;
-        });
+        })
+            .filter(row =>
+                !disasterNumber ||
+                (disasterNumber && row[disasterNumberCol] && row[disasterNumberCol]?.includes(disasterNumber))
+            );
         return newData;
     } else {
-        return data
+        return data.filter(row => {
+                return !disasterNumber || !row[disasterNumberCol] ||
+                (disasterNumber && row[disasterNumberCol] && row[disasterNumberCol]?.includes(disasterNumber))
+            }
+        )
     }
 }
 
 async function getData({
-                           dataSources, dataSource, geoAttribute,
-                           geoid,
-                           pageSize, sortBy, groupBy, fn, notNull, showTotal, colSizes,
-                           filters, filterValue, visibleCols, hiddenCols,
-                           version, extFilterCols, openOutCols, colJustify, striped, extFiltersDefaultOpen,
-                           customColName, linkCols
+    // settings that require data fetching
+                           dataSources, dataSource, version, geoid, geoAttribute, disasterNumber,
+                           groupBy, fn, visibleCols,
+                           fetchData = true, // when setting that don't require data fetching change, call getData with fetchData = false
+                           data, columns, // if fetchData is false, provide these
+
+    // settings that change appearance
+                           pageSize, sortBy,  notNull,  colSizes,
+                           filters, filterValue, hiddenCols, showTotal,
+                           extFilterCols, extFilterValues, openOutCols, colJustify, striped,
+                           extFiltersDefaultOpen, customColName, linkCols,
                        }, falcor) {
     const options = ({groupBy, notNull, geoAttribute, geoid}) => {
-
         return JSON.stringify({
             aggregatedLen: Boolean(groupBy.length),
             filter: {
@@ -189,67 +222,93 @@ async function getData({
     const metadata = dataSources.find(ds => ds.source_id === dataSource)?.metadata?.columns ||
                      dataSources.find(ds => ds.source_id === dataSource)?.metadata ||
                      [];
+    let tmpData, tmpColumns;
 
-    await falcor.get(lenPath(options({groupBy, notNull, geoAttribute, geoid})));
-    const len = Math.min(
-        get(falcor.getCache(), lenPath(options({groupBy, notNull, geoAttribute, geoid})), 0),
-        590);
+    if(fetchData){
+        await falcor.get(lenPath(options({groupBy, notNull, geoAttribute, geoid})));
+        const len = Math.min(
+            get(falcor.getCache(), lenPath(options({groupBy, notNull, geoAttribute, geoid})), 0),
+            590);
 
-    await falcor.get(
-        [...dataPath(options({groupBy, notNull, geoAttribute, geoid})),
-            {from: 0, to: len - 1}, visibleCols.map(vc => fn[vc] ? fn[vc] : vc)]);
+        await falcor.get(
+            [...dataPath(options({groupBy, notNull, geoAttribute, geoid})),
+                {from: 0, to: len - 1}, visibleCols.map(vc => fn[vc] ? fn[vc] : vc)]);
 
-    await falcor.get([...attributionPath, attributionAttributes]);
+        await falcor.get([...attributionPath, attributionAttributes]);
 
-    const metaLookupByViewId = await getMeta({dataSources, dataSource, visibleCols, geoid}, falcor);
+        const metaLookupByViewId = await getMeta({dataSources, dataSource, visibleCols, geoid}, falcor);
 
+        tmpColumns = visibleCols
+            .map(c => metadata.find(md => md.name === c))
+            .filter(c => c)
+            .map(col => {
+                // console.log('map col Header', customColName?.[col.name] || col?.display_name || col?.name)
+                return {
+                    Header: customColName?.[col.name] || col?.display_name || col?.name,
+                    accessor: fn?.[col?.name] || col?.name,
+                    align: colJustify?.[col?.name] || col?.align || 'right',
+                    width: colSizes?.[col.name] || '15%',
+                    minWidth: colSizes?.[col.name] || '15%',
+                    maxWidth: colSizes?.[col.name] || '15%',
+                    filter: col?.filter || filters?.[col?.name],
+                    extFilter: extFilterCols?.includes(col.name),
+                    info: col.desc,
+                    openOut: (openOutCols || [])?.includes(col?.name),
+                    link: linkCols?.[col?.name],
+                    ...col,
+                    type: fn?.[col?.name]?.includes('array_to_string') ? 'string' : col?.type
+                }
+            });
 
-    const columns = visibleCols
-        .map(c => metadata.find(md => md.name === c))
-        .filter(c => c)
-        .map(col => {
-            // console.log('map col Header', customColName?.[col.name] || col?.display_name || col?.name)
-            return {
-                Header: customColName?.[col.name] || col?.display_name || col?.name,
-                accessor: fn?.[col?.name] || col?.name,
-                align: colJustify?.[col?.name] || col?.align || 'right',
-                width: colSizes?.[col.name] || '15%',
-                minWidth: colSizes?.[col.name] || '15%',
-                maxWidth: colSizes?.[col.name] || '15%',
-                filter: col?.filter || filters?.[col?.name],
-                extFilter: extFilterCols?.includes(col.name),
-                info: col.desc,
-                openOut: (openOutCols || [])?.includes(col?.name),
-                link: linkCols?.[col?.name],
-                ...col,
-                type: fn?.[col?.name]?.includes('array_to_string') ? 'string' : col?.type
-            }
-        })
+        tmpData = assignMeta({
+            metadata,
+            visibleCols,
+            dataPath,
+            options,
+            groupBy,
+            fn,
+            notNull,
+            geoAttribute,
+            geoid,
+            disasterNumber,
+            metaLookupByViewId,
+            columns: tmpColumns
+        }, falcor);
 
-    const data = assignMeta({
-        metadata,
-        visibleCols,
-        dataPath,
-        options,
-        groupBy,
-        fn,
-        notNull,
-        geoAttribute,
-        geoid,
-        metaLookupByViewId,
-        columns
-    }, falcor);
-
-    addTotalRow({showTotal, data, columns, setLoading: () => {}});
-
+        addTotalRow({showTotal, data: tmpData || data, columns, setLoading: () => {}});
+    } else{
+        tmpColumns = visibleCols
+            .map(c => metadata.find(md => md.name === c))
+            .filter(c => c)
+            .map(col => {
+                return {
+                    Header: customColName?.[col.name] || col?.display_name || col?.name,
+                    accessor: fn?.[col?.name] || col?.name,
+                    align: colJustify?.[col?.name] || col?.align || 'right',
+                    width: colSizes?.[col.name] || '15%',
+                    minWidth: colSizes?.[col.name] || '15%',
+                    maxWidth: colSizes?.[col.name] || '15%',
+                    filter: col?.filter || filters?.[col?.name],
+                    extFilter: extFilterCols?.includes(col.name),
+                    info: col.desc,
+                    openOut: (openOutCols || [])?.includes(col?.name),
+                    link: linkCols?.[col?.name],
+                    ...col,
+                    type: fn?.[col?.name]?.includes('array_to_string') ? 'string' : col?.type
+                }
+            });
+    }
     const attributionData =  get(falcor.getCache(), attributionPath, {});
 
     return {
+        data: fetchData ? tmpData : data, // new data is only available if fetchData is true
+        columns: tmpColumns || columns, // always prioritize tmpColumns
         attributionData,
-        geoid,
+        geoid, disasterNumber, geoAttribute,
         pageSize, sortBy, groupBy, fn, notNull, showTotal, colSizes,
-        data, columns, filters, filterValue, visibleCols, hiddenCols, geoAttribute,
-        dataSource, dataSources, version, extFilterCols, colJustify, striped, extFiltersDefaultOpen,
+        filters, filterValue, visibleCols, hiddenCols,
+        dataSource, dataSources, version,
+        extFilterCols, extFilterValues, colJustify, striped, extFiltersDefaultOpen,
         customColName, linkCols, openOutCols
     }
 }
@@ -269,6 +328,7 @@ const Edit = ({value, onChange}) => {
     const [loading, setLoading] = useState(true);
     const [status, setStatus] = useState(cachedData?.status);
     const [geoid, setGeoid] = useState(cachedData?.geoid || '36');
+    const [disasterNumber, setDisasterNumber] = useState(cachedData?.disasterNumber);
     const [filters, setFilters] = useState(cachedData?.filters || {});
     const [filterValue, setFilterValue] = useState(cachedData?.filterValue || {});
     const [visibleCols, setVisibleCols] = useState(cachedData?.visibleCols || []);
@@ -343,14 +403,15 @@ const Edit = ({value, onChange}) => {
             setStatus(undefined);
 
             const data = await getData({
-                dataSources, dataSource, geoAttribute, geoid,
+                dataSources, dataSource, geoAttribute, geoid, disasterNumber,
                 pageSize, sortBy, groupBy, fn, notNull, showTotal, colSizes,
                 filters, filterValue, visibleCols, hiddenCols,
-                version, extFilterCols, openOutCols, colJustify, striped, extFiltersDefaultOpen,
-                customColName, linkCols
+                version, extFilterCols, extFilterValues, openOutCols, colJustify, striped, extFiltersDefaultOpen,
+                customColName, linkCols, fetchData: true
             }, falcor);
 
             onChange(JSON.stringify({
+                // only save data and columns
                 ...data,
             }));
 
@@ -359,21 +420,41 @@ const Edit = ({value, onChange}) => {
         }
 
         load()
-    }, [dataSources, dataSource, geoid, geoAttribute,
-        pageSize, sortBy, groupBy, fn, notNull, showTotal, colSizes,
-        filters, filterValue, visibleCols, hiddenCols,
-        version, extFilterCols, openOutCols, colJustify, striped, extFiltersDefaultOpen,
-        customColName, linkCols
-    ]);
+    }, [dataSources, dataSource, geoid, disasterNumber, geoAttribute, groupBy, fn, visibleCols, version]);
+
 
     useEffect(() => {
-        onChange(JSON.stringify({
-            ...cachedData,
-            extFilterValues,
-            striped,
-            extFiltersDefaultOpen
-        }))
-    }, [extFilterValues, striped, extFiltersDefaultOpen]);
+        async function load(){
+            setLoading(true);
+            setStatus(undefined);
+
+            // getData that only sets settings, but doesn't fetch data.
+            const tmpData = await getData({
+                dataSources, dataSource, geoAttribute, geoid, disasterNumber,
+                pageSize, sortBy, groupBy, fn, notNull, showTotal, colSizes,
+                filters, filterValue, visibleCols, hiddenCols,
+                version, extFilterCols, extFilterValues, openOutCols, colJustify, striped, extFiltersDefaultOpen,
+                customColName, linkCols,
+                data, columns,
+                fetchData: false
+            }, falcor);
+
+            onChange(JSON.stringify({
+                // only save data and columns
+                ...tmpData,
+            }));
+
+            setLoading(false);
+        }
+
+        load()
+
+    }, [
+        pageSize, sortBy,  notNull,  colSizes,
+        filters, filterValue, hiddenCols, showTotal,
+        extFilterCols, extFilterValues, openOutCols, colJustify, striped,
+        extFiltersDefaultOpen, customColName, linkCols,
+    ]);
 
     const data = cachedData.data;
 
@@ -416,6 +497,17 @@ const Edit = ({value, onChange}) => {
                     />
                     <GeographySearch value={geoid} onChange={setGeoid} className={'flex-row-reverse'}/>
 
+                    {
+                        (dataSources.find(ds => ds.source_id === dataSource)?.metadata?.columns || [])
+                        .find(c => c.name === 'disaster_number') // change this to type like fips-variable
+                        ? <DisasterSearch
+                                view_id={837}
+                                value={disasterNumber}
+                                geoid={geoid}
+                                onChange={setDisasterNumber}
+                                className={'flex-row-reverse'}
+                            /> : null
+                    }
                     <div className={'block w-full flex mt-1'}>
                         <label className={'align-bottom shrink-0pr-2 py-2 my-1 w-1/4'}> Striped: </label>
                         <div className={'align-bottom p-2 pl-0 my-1 rounded-md shrink self-center'}>
@@ -596,6 +688,10 @@ export default {
         {
             name: 'geoid',
             default: '36',
+        },
+        {
+            name: 'disasterNumber',
+            default: null,
         },
         {
             name: 'pageSize',

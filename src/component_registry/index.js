@@ -24,13 +24,14 @@ import FusionEventsMap from "./FusionEventsMap/index.jsx";
 import OpenFemaDataTable from "./OpenFemaDataTable/index.jsx";
 import CenrepTable from "./CenrepTable/index.jsx";
 import DataTextBox from "./DataTextBox/index.jsx";
-//import FormsTable from "./FormsTable/index.jsx";
+// import FormsTable from "./FormsTable/index.jsx";
 import CensusStatBox from "./CensusStatBox/index.jsx"
 import CensusBarChart from "./CensusBarChart/index.jsx";
 import CensusStackedBarChart from "./CensusStackedBarChart/index.jsx";
 import CensusLineChart from "./CensusLineChart/index.jsx";
 import CountyStatusMap from "./CountyStatusMap/index.jsx";
 import CountyHighlightMap from "./CountyHighlightMap/index.jsx";
+import SearchBar from "./SearchBar/index.jsx";
 
 const ComponentRegistry = {
     // "ColorBox": ColorBox,
@@ -63,6 +64,7 @@ const ComponentRegistry = {
     "Map: Floodplains": DFIRMMap,
     "Map: County Status": CountyStatusMap,
     "Map: County Highlight": CountyHighlightMap,
+    "Search Bar": SearchBar,
     "lexical": {
         ...CalloutBox,
         name: 'Rich Text',

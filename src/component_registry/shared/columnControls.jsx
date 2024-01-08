@@ -228,7 +228,7 @@ const RenderShowTotalControls = ({column, index, showTotal, setShowTotal, fn}) =
 
 const RenderHideControls = ({column, hiddenCols, setHiddenCols, fn}) => {
     if (!setHiddenCols) return null;
-    const colNameWithFn = fn[column] || column //column.includes(' as') ? column.split(' as')[0] : column.split(' AS')[0];
+    const colNameWithFn = column //column.includes(' as') ? column.split(' as')[0] : column.split(' AS')[0];
 
     const isActive = hiddenCols.includes(colNameWithFn);
 
@@ -268,7 +268,7 @@ const RenderHideControls = ({column, hiddenCols, setHiddenCols, fn}) => {
 
 const RenderExtFilterControls = ({column, extFilterCols, setExtFilterCols, fn}) => {
     if (!setExtFilterCols) return null;
-    const colNameWithFn = fn[column] || column //column.includes(' as') ? column.split(' as')[0] : column.split(' AS')[0];
+    const colNameWithFn = column //column.includes(' as') ? column.split(' as')[0] : column.split(' AS')[0];
 
     const isActive = extFilterCols.includes(colNameWithFn);
 
@@ -308,7 +308,7 @@ const RenderExtFilterControls = ({column, extFilterCols, setExtFilterCols, fn}) 
 
 const RenderOpenOutControls = ({column, openOutCols, setOpenOutCols, fn}) => {
     if (!setOpenOutCols) return null;
-    const colNameWithFn = fn[column] || column //column.includes(' as') ? column.split(' as')[0] : column.split(' AS')[0];
+    const colNameWithFn = column //column.includes(' as') ? column.split(' as')[0] : column.split(' AS')[0];
 
     const isActive = openOutCols.includes(colNameWithFn);
 
@@ -548,11 +548,12 @@ const RenderCustomColNameControls = ({column, customColName, setCustomColName, m
 
 const RenderLinkColControls = ({column, linkCols, setLinkCols, metadata}) => {
     if (!setLinkCols) return null;
+
     const currentValue = linkCols[column];
     const [tmpValue, setTmpValue] = useState(currentValue);
 
     useEffect(() => {
-        setTimeout(() => setLinkCols({...linkCols, ...tmpValue}), 1500)
+        setTimeout(() => setLinkCols({...linkCols, ...{[column]: tmpValue}}), 1000)
     }, [tmpValue]);
 
     return (
@@ -562,14 +563,15 @@ const RenderLinkColControls = ({column, linkCols, setLinkCols, metadata}) => {
                 <div className={'p-2 pl-0 my-1 rounded-md shrink'}>
                     <Switch
                         key={`islink-${column}`}
-                        checked={currentValue || false}
-                        onChange={e =>
-                            setLinkCols(currentValue ?
-                                {...linkCols, [column]: {...currentValue, isLink: false}} :
-                                {...linkCols, [column]: {isLink: true}})
+                        // checked={tmpValue?.isLink === true}
+                        onChange={e => {
+                            setTmpValue(
+                                e ? {...tmpValue, isLink: e} : {isLink: e}
+                            )
+                        }
                         }
                         className={classNames(
-                            currentValue ? 'bg-indigo-600' : 'bg-gray-200',
+                            tmpValue?.isLink ? 'bg-indigo-600' : 'bg-gray-200',
                             `relative inline-flex 
                                             h-4 w-10 
                                              cursor-pointer rounded-full border-2 border-transparent 
@@ -581,7 +583,7 @@ const RenderLinkColControls = ({column, linkCols, setLinkCols, metadata}) => {
                         <span
                             aria-hidden="true"
                             className={classNames(
-                                currentValue ? 'translate-x-5' : 'translate-x-0',
+                                tmpValue?.isLink ? 'translate-x-5' : 'translate-x-0',
                                 `pointer-events-none inline-block 
                                                 h-3 w-4
                                                 transform rounded-full bg-white shadow ring-0 t
@@ -591,19 +593,16 @@ const RenderLinkColControls = ({column, linkCols, setLinkCols, metadata}) => {
                     </Switch>
                 </div>
                 {
-                    currentValue ?
+                    tmpValue?.isLink ?
                         <>
                             <input
                                 type={'text'}
                                 className={'align-bottom p-2 ml-0 my-1 bg-white rounded-md w-full shrink'}
-                                value={tmpValue.linkText}
+                                value={tmpValue?.linkText}
                                 placeholder={'link text'}
                                 onChange={e => {
                                     setTmpValue(
-                                        {
-                                            // ...linkCols,
-                                            [column]: {...tmpValue, linkText: e.target.value}
-                                        }
+                                        {...tmpValue, linkText: e.target.value}
                                     )
                                 }
                                 }
@@ -612,14 +611,11 @@ const RenderLinkColControls = ({column, linkCols, setLinkCols, metadata}) => {
                             <input
                                 type={'text'}
                                 className={'align-bottom p-2 ml-0 my-1 bg-white rounded-md w-full shrink'}
-                                value={tmpValue.location}
+                                value={tmpValue?.location}
                                 placeholder={'location'}
                                 onChange={e => {
                                     setTmpValue(
-                                        {
-                                            // ...linkCols,
-                                            [column]: {...tmpValue, location: e.target.value}
-                                        }
+                                        {...tmpValue, location: e.target.value}
                                     )
                                 }
                                 }
