@@ -41,7 +41,7 @@ const parseJson = str => {
 }
 
 async function getMeta({dataSources, dataSource, visibleCols, geoid}, falcor){
-    const metadata = dataSources.find(ds => ds.source_id === dataSource)?.metadata?.columns;
+    const metadata = (dataSources || []).find(ds => ds.source_id === dataSource)?.metadata?.columns;
     const metaViewIdLookupCols =
         metadata?.filter(md => visibleCols.includes(md.name) && ['meta-variable', 'geoid-variable'].includes(md.display) && md.meta_lookup);
 
@@ -146,7 +146,7 @@ const assignMeta = ({
 
 const handleExpandableRows = (data, columns, fn, disasterNumber) => {
     const expandableColumns = columns.filter(c => c.openOut);
-    const disasterNumberCol = (fn['disaster_number'] || 'disaster_number');
+    const disasterNumberCol = (fn?.['disaster_number'] || 'disaster_number');
     // if disaster number is being used to filter data, it should be in visible columns. Hide it if not needed.
 
     if (expandableColumns?.length) {
@@ -238,7 +238,7 @@ async function getData({
 
         const metaLookupByViewId = await getMeta({dataSources, dataSource, visibleCols, geoid}, falcor);
 
-        tmpColumns = visibleCols
+        tmpColumns = (visibleCols || [])
             .map(c => metadata.find(md => md.name === c))
             .filter(c => c)
             .map(col => {
