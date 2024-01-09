@@ -214,6 +214,9 @@ async function getData({
         })
     };
 
+    if(!version) {
+        fetchData = false
+    }
     const lenPath = options => ['dama', pgEnv, 'viewsbyId', version, 'options', options, 'length'];
     const dataPath = options => ['dama', pgEnv, 'viewsbyId', version, 'options', options, 'databyIndex'];
     const attributionPath = ['dama', pgEnv, 'views', 'byId', version, 'attributes'],
@@ -234,6 +237,7 @@ async function getData({
             [...dataPath(options({groupBy, notNull, geoAttribute, geoid})),
                 {from: 0, to: len - 1}, (visibleCols || []).map(vc => fn[vc] ? fn[vc] : vc)]);
 
+        console.log('what?', [...attributionPath, attributionAttributes])
         await falcor.get([...attributionPath, attributionAttributes]);
 
         const metaLookupByViewId = await getMeta({dataSources, dataSource, visibleCols, geoid}, falcor);
@@ -277,7 +281,7 @@ async function getData({
 
         addTotalRow({showTotal, data: tmpData || data, columns, setLoading: () => {}});
     } else{
-        tmpColumns = visibleCols
+        tmpColumns = (visibleCols || [])
             .map(c => metadata.find(md => md.name === c))
             .filter(c => c)
             .map(col => {
