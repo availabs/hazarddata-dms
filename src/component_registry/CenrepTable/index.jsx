@@ -203,12 +203,12 @@ async function getData({
                        }, falcor) {
     const options = ({groupBy, notNull, geoAttribute, geoid}) => {
         return JSON.stringify({
-            aggregatedLen: Boolean(groupBy.length),
+            aggregatedLen: Boolean(groupBy?.length),
             filter: {
                 ...geoAttribute && geoid && {[`substring(${geoAttribute}::text, 1, ${geoid?.toString()?.length})`]: [geoid]},
             },
             exclude: {
-                ...notNull.length && notNull.reduce((acc, col) => ({...acc, [col]: ['null']}), {}) // , '', ' ' error out for numeric columns.
+                ...notNull?.length && notNull.reduce((acc, col) => ({...acc, [col]: ['null']}), {}) // , '', ' ' error out for numeric columns.
             },
             groupBy: groupBy,
         })
@@ -219,8 +219,8 @@ async function getData({
     const attributionPath = ['dama', pgEnv, 'views', 'byId', version, 'attributes'],
         attributionAttributes = ['source_id', 'view_id', 'version', '_modified_timestamp'];
 
-    const metadata = dataSources.find(ds => ds.source_id === dataSource)?.metadata?.columns ||
-                     dataSources.find(ds => ds.source_id === dataSource)?.metadata ||
+    const metadata = (dataSources || []).find(ds => ds.source_id === dataSource)?.metadata?.columns ||
+                     (dataSources || []).find(ds => ds.source_id === dataSource)?.metadata ||
                      [];
     let tmpData, tmpColumns;
 
@@ -232,7 +232,7 @@ async function getData({
 
         await falcor.get(
             [...dataPath(options({groupBy, notNull, geoAttribute, geoid})),
-                {from: 0, to: len - 1}, visibleCols.map(vc => fn[vc] ? fn[vc] : vc)]);
+                {from: 0, to: len - 1}, (visibleCols || []).map(vc => fn[vc] ? fn[vc] : vc)]);
 
         await falcor.get([...attributionPath, attributionAttributes]);
 

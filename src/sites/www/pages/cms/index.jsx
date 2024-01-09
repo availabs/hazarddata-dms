@@ -15,14 +15,16 @@ registerDataType("selector", Selector)
 
 
 export default { 
-  ...dmsPageFactory(siteConfig({ 
-    app: "dms-site",
-    type: "docs-ctp",
-    logo: <Logo />, 
-    rightMenu: <AuthMenu />,
-    baseUrl: "",
-    checkAuth
-  }), "/",  withAuth),
+  ...dmsPageFactory(
+    siteConfig({ 
+      app: "dms-site",
+      type: "docs-ctp",
+      logo: <Logo />, 
+      rightMenu: <AuthMenu />,
+      baseUrl: "",
+      checkAuth
+    }
+  ), "/",  withAuth),
   name: "CMS",
   sideNav: {
     size: "none"

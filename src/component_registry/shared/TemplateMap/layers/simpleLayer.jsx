@@ -142,6 +142,7 @@ class SimpleMapLayer extends LayerContainer {
 
     console.time('changing sources and layers')
     sources.forEach(s => {
+      console.log(s)
       if(!map.getSource(s.id)) {
         map.addSource(s.id,s.source)
       }
