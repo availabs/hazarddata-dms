@@ -268,6 +268,8 @@ const ppdaf = () => {
               sortIconDown: 'fas fa-sort-amount-down text-gray-500 opacity-75',
               sortIconUp: 'fas fa-sort-amount-up text-gray-500 opacity-75',
               sortIconIdeal: 'fa fa-bars text-gray-500 opacity-25',
+                downloadIcon: 'fa fa-download text-sm',
+                downloadWrapper: 'text-blue-300 hover:text-blue-500',
                 vars: {
                     color: colors,
                     size: sizes
