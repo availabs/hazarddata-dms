@@ -20,7 +20,7 @@ const theme = {
     content:'flex-1 flex px-4'
   },
   layout: {
-    page: 'h-full w-full bg-gradient-to-r from-[#f8f4ec] to-[#fefefe] flex flex-col',
+    page: 'h-full w-full bg-gradient-to-r from-[#f8f4ec] to-[#fefefe] flex flex-col mb-12',
     container: 'w-full flex-1 flex flex-col',
 
   },
@@ -40,7 +40,7 @@ export default {
       rightMenu: <AuthMenu />,
       baseUrl: "",
       checkAuth,
-      //theme
+      theme
     }
   ), "/",  withAuth),
   name: "CMS",
