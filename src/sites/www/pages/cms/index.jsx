@@ -10,8 +10,8 @@ import siteConfig from '~/modules/dms/src/patterns/page/siteConfig'
 import ComponentRegistry from '~/component_registry'
 import Selector, { registerComponents } from "~/modules/dms/src/patterns/page/selector"
 
-registerComponents(ComponentRegistry)
 registerDataType("selector", Selector)
+registerComponents(ComponentRegistry)
 
 
 const theme = {
@@ -20,7 +20,7 @@ const theme = {
     content:'flex-1 flex px-4'
   },
   layout: {
-    page: 'h-full w-full bg-gradient-to-r from-[#f8f4ec] to-[#fefefe] flex flex-col mb-12',
+    page: 'h-full w-full bg-gradient-to-r from-[#f8f4ec] to-[#fefefe] flex flex-col',
     container: 'w-full flex-1 flex flex-col',
 
   },

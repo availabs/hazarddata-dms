@@ -22,3 +22,6 @@
 [submodule "src/component_registry"]
 	path = src/component_registry
 	url = git@github.com:availabs/component_registry.git
+[submodule "src/pages/DataManager"]
+	path = src/pages/DataManager
+	url = git@github.com:availabs/DataManagerClient.git

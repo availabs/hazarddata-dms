@@ -53,7 +53,7 @@ export default withAuth(({title, shadowed = true, user, children}) => {
                         { user.authLevel >= 5 ? 
                         <div className='py-2'>
                             <div className=''> 
-                                {Item('/admin/templates', 'fad fa-screwdriver-wrench fa-fw flex-shrink-0  pr-1', 'Templates')}
+                                {Item('/templates', 'fad fa-screwdriver-wrench fa-fw flex-shrink-0  pr-1', 'Templates')}
                             </div>
                             <div className=''> 
                                 {Item('/cenrep', 'fad fa-database fa-fw flex-shrink-0  pr-1', 'Cen Rep')}
