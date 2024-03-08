@@ -12,9 +12,10 @@ import ComponentRegistry from '~/component_registry'
 import Selector, { registerComponents } from "~/modules/dms/src/patterns/page/selector"
 
 import theme from './theme'
+import CountyHeader from "~/additional_components/CountyHeader.jsx";
 
 registerDataType("selector", Selector)
-registerComponents(ComponentRegistry)
+registerComponents({...ComponentRegistry, "Header: County Header II": CountyHeader})
 
 
 
