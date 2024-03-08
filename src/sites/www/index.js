@@ -9,8 +9,8 @@ import hazmitDataTypes from "~/pages/HazmitDataTypes"
 
 //import Admin, { authMenuConfig } from "./pages/admin"
 //import Playground from './pages/admin/playground'
-import Templates from './pages/admin/templates'
-import Interactive from "./pages/interactive/index.jsx";
+//import Templates from './pages/admin/templates'
+// import Interactive from "./pages/interactive/index.jsx";
 
 
 
@@ -26,8 +26,8 @@ const Routes = [
     useFalcor,
     useAuth
   }),
-  Templates,
-  Interactive,
+  // Templates,
+  // Interactive,
   // -- Managed Data Routes -- //
   // -- Front End Routes -- //
   CMS
