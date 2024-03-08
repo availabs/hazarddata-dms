@@ -8,7 +8,7 @@ import {EditMap,ViewMap} from "../component_registry/shared/TemplateMap";
 export function Header ({  title = '', bgClass='yellow', subTitle='County Profile', link='#', mapLayer={},}) {
   
   return (
-    <div className={`h-[300px] bg-cover bg-center w-full flex border-2 border-${bgClass}-500 bg-gradient-to-tl rounded-lg from-${bgClass}-400 to-${bgClass}-700`}>
+    <div className={`h-[300px] w-full flex border-2 border-yellow-500 bg-gradient-to-br from-yellow-100 to-yellow-500 rounded-lg `}>
       <div className='p-2 h-full w-[250px] pl-8'>
         <ViewMap
             layerProps={{ccl: mapLayer}}
