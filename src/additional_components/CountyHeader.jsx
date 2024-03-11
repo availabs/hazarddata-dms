@@ -20,10 +20,10 @@ export function Header ({  title = '', bgClass='yellow', subTitle='County Profil
         <div className='text-3xl sm:text-7xl font-bold text-[#f2a91a] text-right w-full text-display'>
           {title && <div>{title}</div>}
         </div>
-        <div className='text-lg tracking-wider pt-2 sm:text-3xl font-bold text-slate-200 text-right w-full uppercase'>
+        <div className='text-lg tracking-wider pt-2 sm:text-3xl font-bold text-blue-500 text-right w-full uppercase'>
           {subTitle && <div>{subTitle}</div>}
         </div>
-        <div className='text-sm tracking-wider sm:text-sm font-bold text-slate-200 text-right w-full uppercase'>
+        <div className='text-sm tracking-wider sm:text-sm font-bold text-blue-500 text-right w-full uppercase'>
           <a href={link} target="_blank">Local Hazard Mitigation Plan <i  className='fa fa-book' /></a>
         </div>
         <div className='flex-1'/>
