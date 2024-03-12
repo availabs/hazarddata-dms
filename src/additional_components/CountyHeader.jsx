@@ -3,13 +3,16 @@ import {ButtonSelector} from "../component_registry/shared/buttonSelector.jsx";
 import {isJson} from "~/utils/macros.jsx";
 import GeographySearch from "../component_registry/shared/geographySearch.jsx";
 import {EditMap,ViewMap} from "../component_registry/shared/TemplateMap";
+import {pgEnv} from "~/utils";
+import get from 'lodash/get'
+//bg-[#da4e00]
+// [#f8f4ec]
 
-
-export function Header ({  title = '', bgClass='yellow', subTitle='County Profile', link='#', mapLayer={},}) {
+export function Header ({  title = '', bgClass='', subTitle='County Profile', link='#', mapLayer={},}) {
   
   return (
-    <div className={`h-[300px] w-full flex border-2 border-yellow-500 bg-gradient-to-br from-yellow-100 to-yellow-500 rounded-lg `}>
-      <div className='p-2 h-full w-[250px] pl-8'>
+    <div className={`h-[300px] bg-cover bg-center w-full flex   bg-gradient-to-tr from-[#f8f4ec] to-[#fefefe]`}>
+      <div className='p-2 h-full w-[350px] pl-8'>
         <ViewMap
             layerProps={{ccl: mapLayer}}
             legend={{show:false}}
@@ -20,25 +23,46 @@ export function Header ({  title = '', bgClass='yellow', subTitle='County Profil
         <div className='text-3xl sm:text-7xl font-bold text-[#f2a91a] text-right w-full text-display'>
           {title && <div>{title}</div>}
         </div>
-        <div className='text-lg tracking-wider pt-2 sm:text-3xl font-bold text-blue-500 text-right w-full uppercase'>
+        <div className='text-lg tracking-wider pt-2 sm:text-3xl font-bold text-slate-200 text-right w-full uppercase'>
           {subTitle && <div>{subTitle}</div>}
         </div>
-        <div className='text-sm tracking-wider sm:text-sm font-bold text-blue-500 text-right w-full uppercase'>
+        {/*<div className='text-sm tracking-wider sm:text-sm font-bold text-slate-200 text-right w-full uppercase'>
           <a href={link} target="_blank">Local Hazard Mitigation Plan <i  className='fa fa-book' /></a>
-        </div>
+        </div>*/}
         <div className='flex-1'/>
       </div>
     </div>
   )
 }
 
-function getMapLayer(geoid) {
+async function getMapLayer(geoid,falcor) {
+  
+   const stateView = 285; // need to pull this based on categories
+    const countyView = 286;
+
+    // mapFocus
+    const geomColTransform = [`st_asgeojson(st_envelope(ST_Simplify(geom, ${false && geoid?.toString()?.length === 5 ? `0.1` : `0.5`})), 9, 1) as geom`],
+        geoIndices = {from: 0, to: 0},
+        stateFips = geoid?.toString()?.substring(0, 2),
+        geoPath = (view_id) =>
+            ['dama', pgEnv, 'viewsbyId', view_id,
+                'options', JSON.stringify({
+                filter: {
+                    geoid: [false && geoid?.toString()?.length >= 5 ? geoid : stateFips.substring(0, 2)]
+                }}),
+                'databyIndex'
+            ];
+    const geomRes = await falcor.get([...geoPath(false && geoid?.toString()?.length === 5 ? countyView : stateView), geoIndices, geomColTransform]);
+    const geom = get(geomRes, ["json", ...geoPath(false && geoid?.toString()?.length === 5 ? countyView : stateView), 0, geomColTransform]);
+    const mapFocus = get(JSON.parse(geom), 'bbox');
+    // console.log('mapFocus', mapFocus)
+
   return {
          sources : [{
           id: "counties",
           source: {
             "type": "vector",
-            "url": "https://tiles.availabs.org/data/hazmit_dama_s365_v778_1694455888142.json"
+            "url": "https://tiles.availabs.org/data/tiger_carto.json"
           },
         }],
         layers:[{
@@ -46,7 +70,7 @@ function getMapLayer(geoid) {
             "source": "counties",
             "source-layer": "s365_v778",
             "type": "fill",
-            "filter" :  ['in', geoid.substring(0,2), ['string', ['get', 'geoid']]],
+            "filter" :   ['==', ['string', geoid.substring(0,2)], ['slice', ['string', ['get', 'geoid']],0,2]],
             
             "paint": {
               "fill-color": [
@@ -67,10 +91,10 @@ function getMapLayer(geoid) {
                     {[geoid]: '#f2a91a'}
                   ]
                 ],
-                '#e1e1e1'
+                '#d0d0ce'
               ]
 
-              // '#ddd', //["get", ["get", "geoid"], ["literal", {[geoid]: 'yellow'}]],
+              // '#ddd', //["get", ["get", "geoid"], ["literal", {[geoid]: 'blue'}]],
             }
           },
           {
@@ -78,7 +102,7 @@ function getMapLayer(geoid) {
             "source": "counties",
             "source-layer": "s365_v778",
             "type": "line",
-            "filter" :  ['in', geoid.substring(0,2), ['string', ['get', 'geoid']]],
+            "filter" :  ['in', geoid.substring(0,2), ['slice', ['string', ['get', 'geoid']],0,2]],
             "paint": {
               "line-width": [
                 "interpolate",
@@ -87,26 +111,24 @@ function getMapLayer(geoid) {
                 5, 0.5,
                 22, 1
               ],
-              "line-color": "#7e7e7e",
+              "line-color": "#efefef",//"#7e7e7e",
               "line-opacity": 0.5
             }
         }],
-        mapFocus: [-79.761313,40.477399,-71.777491,45.01084]
+        mapFocus//: [-79.761313,40.477399,-71.777491,45.01084]
       }
 }
 
-const getData = ({geoid, title, subTitle, link='2023 Update'}) =>{
+const getData = async ({geoid, title, subTitle, link='2023 Update'},falcor) =>{
   
   console.log('county header getData', title)
-  return new Promise((resolve, reject) => {
-    resolve({
-        geoid,
+  const mapLayer =  await getMapLayer(geoid,falcor)
+  return {
       title,
       subTitle,
       link,
-      mapLayer: getMapLayer(geoid)
-    })
-  })
+      mapLayer
+  }
 }
 
 const Edit = ({value, onChange, size}) => {
@@ -115,7 +137,7 @@ const Edit = ({value, onChange, size}) => {
         return value && isJson(value) ? JSON.parse(value) : {}
     }, [value]);
 
-    console.log('Edit: value,', cachedData, value)
+    //console.log('Edit: value,', size)
    
     const baseUrl = '/';
 
@@ -127,12 +149,10 @@ const Edit = ({value, onChange, size}) => {
         title: cachedData.title || '', 
         subTitle: cachedData.subTitle || 'County Profile', 
         link: cachedData.link || '2023 Update',
-        mapLayer: getMapLayer(cachedData.geoid || '36001'),
-        bgClass: 'yellow',
+        mapLayer: cachedData.mapLayer || getMapLayer(cachedData.geoid || '36001')
     })
 
     useEffect(() => {
-        console.log('compData', compData, value)
       if(value !== JSON.stringify(compData)) {
         onChange(JSON.stringify(compData))
       }
@@ -149,7 +169,7 @@ const Edit = ({value, onChange, size}) => {
               </div>
             </div>
             <GeographySearch value={compData.geoid} 
-                onChange={(v) =>  setCompData({...compData, geoid: v, mapLayer: getMapLayer(v)})}
+                onChange={(v) => setCompData({...compData, "geoid": v})} 
                 className={'flex-row-reverse'}
             />
 
@@ -198,7 +218,7 @@ Edit.settings = {
 
 
 export default {
-    "name": 'Header: County II',
+    "name": 'Header: County 2',
     "type": 'Header',
     "variables": [
         { 
@@ -215,7 +235,7 @@ export default {
         },
         { 
           name:'link',
-          default: '2023 Update',
+          default: '',
         }
     ],
     getData,
