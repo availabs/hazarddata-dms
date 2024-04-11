@@ -55,4 +55,6 @@ const AuthConfig = {
 }
 
 
+
 export default amsFactory(AuthConfig, "/auth")
+
