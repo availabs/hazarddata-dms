@@ -462,7 +462,7 @@ const DataDownload = (props) => {
                                
                                 <div className="text-red-600 text-xs">{state.geolevel === "" ? 'Please select a Geolevel' :null}</div>
                             </div>*/}
-                            <div className="sm:col-span-6">
+                            {/*<div className="sm:col-span-6">
                                 <div className="mt-6 ">
                                     <fieldset>
                                         <div className="relative flex items-start">
@@ -509,9 +509,9 @@ const DataDownload = (props) => {
                                         <div className="text-red-600 text-xs">{state.hazard.size === 0 ? 'Please select at least one hazard' :null}</div>
                                     </fieldset>
                                 </div>
-                            </div>
+                            </div>*/}
                             <div className="sm:col-span-2">
-                                <div className="flex justify">
+                                <div className="flex justify pt-4">
                                     {isEmpty(state.data)  || state.changed ?
                                         <button
                                             onClick={() => {}}

@@ -1,21 +1,46 @@
  // const bg = 'gray-50'
   const primary =  'nuetral'
   const highlight =  'white'
-  const accent =  'blue'
+  const accent =  'yellow'
+
+import Logo from '~/layout/Logo'
+import AuthMenu from "~/pages/Auth/AuthMenu"
 
 const theme = {
-  // page: {
-  //   container: 'flex-1 w-full h-full ',
-  //   content:'flex-1 flex px-4'
-  // },
-  // layout: {
-  //   page: 'h-full w-full bg-gradient-to-r from-[#f8f4ec] to-[#fefefe] flex flex-col',
-  //   container: 'w-full flex-1 flex flex-col',
-
-  // },
+  navOptions: {
+    logo: <Logo />,
+    sideNav: {
+      size: 'none',
+      search: 'none',
+      logo: 'top',
+      dropdown: 'none',
+      nav: 'none'
+    },
+    topNav: {
+      size: 'compact',
+      dropdown: 'none',
+      search: 'none',
+      logo: 'left',
+      rightMenu: <AuthMenu />,
+      nav: 'main' 
+    }
+  },
+  heading: {
+    "base": "p-2 w-full font-sans font-medium text-md bg-transparent",
+    "1": `text-amber-500 font-bold text-xl tracking-wider py-1 pl-1`,
+    "2": `text-lg tracking-wider`,
+    "3": `text-md tracking-wide`,
+    "default": ''                                                                        
+  },
+  levelClasses: {
+    '1': ' pt-2 pb-1 uppercase text-sm text-yellow-600 font-medium hover:underline cursor-pointer border-r-2 mr-4',
+    '2': 'pl-2 pt-2 pb-1 uppercase text-sm text-slate-400 hover:underline cursor-pointer border-r-2 mr-4',
+    '3': 'pl-4 pt-2 pb-1 text-sm text-slate-400 hover:underline cursor-pointer border-r-2 mr-4',
+    '4': 'pl-6 pt-2 pb-1 text-sm text-slate-400 hover:underline cursor-pointer border-r-2 mr-4',
+  },
   page: {
     wrapper1: 'w-full flex-1 flex flex-col  ', // first div inside Layout
-    wrapper2: 'w-full h-full flex-1 flex flex-row px-1 md:px-6 py-6 bg-gradient-to-r from-[#f8f4ec] to-[#fefefe] flex flex-col', // inside page header, wraps sidebar
+    wrapper2: 'w-full h-full flex-1 flex flex-row px-1 md:px-6 py-6 bg-gradient-to-r from-[#f8f4ec] to-[#fefefe]', // inside page header, wraps sidebar
     wrapper3: 'flex flex-1 w-full  flex-col  relative text-md font-light leading-7 p-4 min-h-[calc(100vh_-_51px)]' , // content wrapepr
   },
   navPadding: {
@@ -32,8 +57,8 @@ const theme = {
           }
           let colors = {
             white: {
-              contentBg: `bg-${highlight}`,
-              contentBgAccent: `bg-neutral-100`,
+              contentBg: ``,
+              contentBgAccent: ``,
               accentColor: `${accent}-600`,
               accentBg: `hover:bg-${accent}-400`,
               borderColor: `border-${primary}-100`,
@@ -42,8 +67,8 @@ const theme = {
               highlightColor: `text-${primary}-800`,
             },
             transparent: {
-              contentBg: `bg-neutral-100`,
-              contentBgAccent: `bg-neutral-100`,
+              contentBg: ``,
+              contentBgAccent: ``,
               accentColor: `${accent}-600`,
               accentBg: `hover:bg-${accent}-400`,
               borderColor: `border-${primary}-100`,

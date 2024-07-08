@@ -9,7 +9,7 @@ import AuthMenu from "~/pages/Auth/AuthMenu"
 
 import siteConfig from '~/modules/dms/src/patterns/page/siteConfig'
 import ComponentRegistry from '~/component_registry'
-import Selector, { registerComponents } from "~/modules/dms/src/patterns/page/selector"
+import Selector, { registerComponents } from "~/modules/dms/src/patterns/page/components/selector"
 
 import theme from './theme'
 import CustomComponents from "~/additional_components";
@@ -25,14 +25,11 @@ export default {
     siteConfig({ 
       app: "dms-site",
       type: "docs-ctp",
-      logo: <Logo />, 
-      rightMenu: <AuthMenu />,
       baseUrl: "",
-      checkAuth,
       useFalcor,
       theme
     }
-  ), "/",  withAuth),
+  ), withAuth),
   name: "CMS",
   sideNav: {
     size: "none"

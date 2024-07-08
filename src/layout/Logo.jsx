@@ -10,7 +10,7 @@ const Logo = ({sideNav}) => {
 
 	return (
 		<>
-			<Link to="/" className={`flex  items-center h-full`}>
+			<Link to="/" className={`flex  items-center h-16`}>
 				<div className='h-full pl-4 pr-2 flex items-center '>
 					<span className='font-bold text-lg tracking-wider px-12'> Hazard Data</span>
 				</div>	
