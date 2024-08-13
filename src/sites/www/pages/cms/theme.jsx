@@ -15,7 +15,7 @@ const theme = {
   // },
   page: {
     wrapper1: 'w-full flex-1 flex flex-col  ', // first div inside Layout
-    wrapper2: 'w-full h-full flex-1 flex flex-row px-1 md:px-6 py-6 bg-gradient-to-r from-[#f8f4ec] to-[#fefefe] flex flex-col', // inside page header, wraps sidebar
+    wrapper2: 'w-full h-full flex-1 flex flex-row px-1 md:px-6 py-6 bg-gradient-to-r from-[#f8f4ec] to-[#fefefe] flex flex-row', // inside page header, wraps sidebar
     wrapper3: 'flex flex-1 w-full  flex-col  relative text-md font-light leading-7 p-4 min-h-[calc(100vh_-_51px)]' , // content wrapepr
   },
   navPadding: {
