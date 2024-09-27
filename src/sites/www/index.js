@@ -17,7 +17,17 @@ const Routes = [
     //navSettings: authMenuConfig,
     dataTypes: hazmitDataTypes,
     useFalcor,
-    useAuth
+    useAuth,
+    navSettings: {
+      topNav: {
+        position: 'fixed',
+        size: 'compact',
+      },
+      sideNav: {
+        size: 'none',
+        color: 'white'
+      },
+    }
   }),
   // Templates,
   // Interactive,
