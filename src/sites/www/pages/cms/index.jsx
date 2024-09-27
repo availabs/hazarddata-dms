@@ -5,7 +5,7 @@ import { useFalcor } from '~/modules/avl-falcor';
 import checkAuth  from "~/layout/checkAuth"
 import Logo from '~/layout/Logo'
 import AuthMenu from "~/pages/Auth/AuthMenu"
-
+import {pgEnv} from "../../../../utils/index.js";
 
 import { siteConfig } from '~/modules/dms/src/patterns/page/siteConfig'
 import ComponentRegistry from '~/component_registry'
@@ -31,6 +31,9 @@ export default {
     siteConfig({ 
       app: "dms-site",
       type: "docs-ctp",
+      //pgEnv,
+      logo: <Logo />, 
+      rightMenu: <AuthMenu />,
       baseUrl: "",
       useFalcor,
       theme,
