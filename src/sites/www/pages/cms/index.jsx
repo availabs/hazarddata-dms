@@ -36,7 +36,7 @@ export default {
       rightMenu: <AuthMenu />,
       baseUrl: "",
       useFalcor,
-      theme,
+      //themes: {default: theme},
       pgEnv:'hazmit_dama'
     }
   ), withAuth),

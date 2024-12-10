@@ -1,0 +1,33 @@
+[
+  {
+    "id": "967186",
+    "app": "dms-site",
+    "type": "prod",
+    "patterns": [
+      {
+        "id": "967188",
+        "ref": "dms-site+pattern",
+        "app": "dms-site",
+        "theme": {
+          "settings": {
+            "theme": {
+              "theme": "mny"
+            }
+          }
+        },
+        "base_url": "/",
+        "doc_type": "docs-ctp",
+        "pattern_type": "page",
+        "created_at": "2024-12-10 15:14:03.990649+00",
+        "updated_at": "2024-12-10 15:37:42.169363+00",
+        "created_by": null,
+        "updated_by": null
+      }
+    ],
+    "site_name": "Hazard Data CTP",
+    "created_at": "2024-12-10 15:13:44.436012+00",
+    "created_by": null,
+    "updated_at": "2024-12-10 15:14:04.009659+00",
+    "updated_by": null
+  }
+]
