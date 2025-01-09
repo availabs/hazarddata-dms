@@ -16,6 +16,7 @@ import LayoutWrapper from "~/layout/LayoutWrapper"
 
 
 import CustomComponents from "~/additional_components";
+import FormComponents from "~/modules/dms/src/patterns/forms/components/"
 import { DamaMap } from '~/pages/DataManager'
 import siteData from './siteData.json'
 
@@ -24,7 +25,7 @@ import siteData from './siteData.json'
 
 
 registerDataType("selector", Selector)
-registerComponents({...ComponentRegistry, ...CustomComponents})
+registerComponents({...ComponentRegistry, ...CustomComponents, ...FormComponents})
 registerComponents({
   "Map: Dama Map": DamaMap,
 })
