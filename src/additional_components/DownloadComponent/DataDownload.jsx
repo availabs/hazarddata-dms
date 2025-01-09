@@ -30,6 +30,61 @@ const hazards = [
     {value:'coastal', name:'Coastal Hazards'}
 ];
 
+const states_data = {
+   "00": "National Data",
+   "01": "Alabama",
+   "02": "Alaska",
+   "04": "Arizona",
+   "05": "Arkansas",
+   "06": "California",
+   "08": "Colorado",
+   "09": "Connecticut",
+   "10": "Delaware",
+   "11": "District of Columbia",
+   "12": "Florida",
+   "13": "Geogia",
+   "15": "Hawaii",
+   "16": "Idaho",
+   "17": "Illinois",
+   "18": "Indiana",
+   "19": "Iowa",
+   "20": "Kansas",
+   "21": "Kentucky",
+   "22": "Louisiana",
+   "23": "Maine",
+   "24": "Maryland",
+   "25": "Massachusetts",
+   "26": "Michigan",
+   "27": "Minnesota",
+   "28": "Mississippi",
+   "29": "Missouri",
+   "30": "Montana",
+   "31": "Nebraska",
+   "32": "Nevada",
+   "33": "New Hampshire",
+   "34": "New Jersey",
+   "35": "New Mexico",
+   "36": "New York",
+   "37": "North Carolina",
+   "38": "North Dakota",
+   "39": "Ohio",
+   "40": "Oklahoma",
+   "41": "Oregon",
+   "42": "Pennsylvania",
+   "44": "Rhode Island",
+   "45": "South Carolina",
+   "46": "South Dakota",
+   "47": "Tennessee",
+   "48": "Texas",
+   "49": "Utah",
+   "50": "Vermont",
+   "51": "Virginia",
+   "53": "Washington",
+   "54": "West Virginia",
+   "55": "Wisconsin",
+   "56": "Wyoming"
+}
+
 const DataDownload = (props) => {
     
     const [state, setState] = React.useState({
@@ -367,9 +422,7 @@ const DataDownload = (props) => {
 
 
 
-    let states_data = []
-    let counties_data =  []
-        return (
+    return (
             <form>
                 <div className="w-full max-w-full ">
                     <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -411,20 +464,18 @@ const DataDownload = (props) => {
                                         value = {state.state_fips}
                                         id = 'state_fips'
                                     >
-                                        <option key={0} value={""}>---Select a state---</option>
-                                        {states_data.length > 0 ?states_data.map((item,i) =>{
+                                        <option key={0} value={"00"}>National Data</option>
+                                        {Object.keys(states_data).map((fips,i) =>{
                                             return(
-                                                <option key={i+1} value={item.fips}>{item.name}</option>
+                                                <option key={i+1} value={fips}>{states_data[fips]}</option>
                                             )
-                                        })
-                                        :
-                                            null
-                                        }
+                                        })}
+                                        
                                     </select>
                                 </div>
-                                <div className="text-red-600 text-xs">{!state.state_fips  ? 'Please select a State' :null}</div>
+                                {/*<div className="text-red-600 text-xs">{!state.state_fips  ? 'Please select a State' :null}</div>*/}
                             </div>
-                            <div className="sm:col-span-6">
+                            {/*<div className="sm:col-span-6">
                                 <label htmlFor="county" className="block text-sm font-medium leading-5 text-gray-700">
                                     County
                                 </label>
@@ -446,7 +497,7 @@ const DataDownload = (props) => {
                                         }
                                     </select>
                                 </div>
-                            </div>
+                            </div>*/}
                             {/*<div className="sm:col-span-6">
                                 <label htmlFor="username" className="block text-sm font-medium leading-5 text-gray-700 flex-initial">
                                     Geo Level
@@ -462,7 +513,7 @@ const DataDownload = (props) => {
                                
                                 <div className="text-red-600 text-xs">{state.geolevel === "" ? 'Please select a Geolevel' :null}</div>
                             </div>*/}
-                            <div className="sm:col-span-6">
+                            {/*<div className="sm:col-span-6">
                                 <div className="mt-6 ">
                                     <fieldset>
                                         <div className="relative flex items-start">
@@ -509,12 +560,14 @@ const DataDownload = (props) => {
                                         <div className="text-red-600 text-xs">{state.hazard.size === 0 ? 'Please select at least one hazard' :null}</div>
                                     </fieldset>
                                 </div>
-                            </div>
+                            </div>*/}
                             <div className="sm:col-span-2">
-                                <div className="flex justify">
-                                    {isEmpty(state.data)  || state.changed ?
-                                        <button
+                                <div className="flex justify pt-4">
+                                   
+                                        <a
                                             onClick={() => {}}
+                                            href='https://graph.availabs.org/files/hazmit_dama_834/AVAIL_Fusion_Events_v834.zip'
+                                            target="_blank"
                                             className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
 
                                             <svg className="fill-current w-4 h-4 mr-2"
@@ -522,22 +575,8 @@ const DataDownload = (props) => {
                                                 <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/>
                                             </svg>
                                             <span>Export Data</span>
-                                        </button>
-                                        :
-                                        <button
-                                            className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
-                                            <svg className="fill-current w-4 h-4 mr-2"
-                                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/>
-                                            </svg>
-                                            <CSVLink
-                                                style={{width:'100%'}}
-                                                data={state.data}
-                                                filename={`${state.state_fips && state.state_fips !== ""  ? this.props.geoData[state.state_fips].name : ''}_${state.dataset}_${state.county!== "" ? this.props.geoData[state.county].name : 'all'}_${state.geolevel}.csv`}>
-                                                Download CSV
-                                            </CSVLink>
-                                        </button>
-                                    }
+                                        </a>
+                                      
 
                                 </div>
                                 {state.loading ? 'Fetching Data ...' : null}

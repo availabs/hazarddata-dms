@@ -93,7 +93,8 @@
     "simple-statistics": "^7.8.3",
     "tlds": "^1.238.0",
     "use-immer": "^0.9.0",
-    "write-excel-file": "^2.0.9",
+    "uuid": "^10.0.0",
+    "write-excel-file": "^2.0.10",
     "xhr2": "^0.2.1"
   },
   "devDependencies": {

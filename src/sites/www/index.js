@@ -7,13 +7,6 @@ import CMS from './pages/cms'
 import DamaRoutes from "~/pages/DataManager"
 import hazmitDataTypes from "~/pages/HazmitDataTypes"
 
-//import Admin, { authMenuConfig } from "./pages/admin"
-//import Playground from './pages/admin/playground'
-//import Templates from './pages/admin/templates'
-// import Interactive from "./pages/interactive/index.jsx";
-
-
-
 
 const Routes = [
   // -- Admin Routes -- //
@@ -24,7 +17,17 @@ const Routes = [
     //navSettings: authMenuConfig,
     dataTypes: hazmitDataTypes,
     useFalcor,
-    useAuth
+    useAuth,
+    navSettings: {
+      topNav: {
+        position: 'fixed',
+        size: 'compact',
+      },
+      sideNav: {
+        size: 'none',
+        color: 'white'
+      },
+    }
   }),
   // Templates,
   // Interactive,
