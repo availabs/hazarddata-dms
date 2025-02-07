@@ -65,6 +65,7 @@
     "file-saver": "^2.0.5",
     "fuse.js": "^6.6.2",
     "html-to-image": "^1.11.11",
+    "immutability-helper": "^3.1.1",
     "jszip": "^3.10.1",
     "lexical": "^0.13.1",
     "linkify-it": "^4.0.1",
