@@ -6,11 +6,11 @@ const AuthConfig = {
   children: [
     { type: "ams-login" ,
       path: "login",
-      props: { title: "MitigateNY" }
+      props: { title: "Hazard Data" }
     },
     { ype: "ams-reset-password",
       path: "reset-password",
-      props: { title: "MitigateNY" }
+      props: { title: "Hazard Data" }
     },
     { type: "ams-logout",
       path: "logout",
@@ -25,7 +25,7 @@ const AuthConfig = {
       path: "register",
       // props: { addToGroup: "123" },
       props: {
-        title: "MitigateNY",
+        title: "Hazard Data",
         addToGroup: "NPMRDS_PM3 New Users"
       }
     },

@@ -23,6 +23,7 @@
     ]
   },
   "dependencies": {
+    "@availabs/dms": "^0.0.61",
     "@availabs/ams": "^2.0.6",
     "@availabs/avl-falcor": "^0.0.3",
     "@availabs/dms": "^0.0.61",

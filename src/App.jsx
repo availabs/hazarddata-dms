@@ -24,13 +24,9 @@ import siteData from './siteData.json'
 
 
 registerDataType("selector", Selector)
-registerComponents({...ComponentRegistry, ...CustomComponents})
 registerComponents({
   "Map: Dama Map": DamaMap,
 })
-
-registerDataType("selector", Selector)
-
 
 Auth.forEach(f => {
   f.Component = f.element 
@@ -54,7 +50,7 @@ function App() {
         routes={[
           //cenrep
           ...DamaRoutes({
-              baseUrl:'/cenrep',
+              baseUrl:'/datasets',
               defaultPgEnv : "hazmit_dama",
               //navSettings: authMenuConfig,
               dataTypes: hazmitDataTypes,
