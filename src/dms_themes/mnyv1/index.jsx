@@ -19,13 +19,8 @@ const Logo = ({sideNav}) => {
   return (
     <>
       <Link to="/" className={`flex `}>
-<<<<<<< HEAD
         <div className="h-12 px-4 flex items-center font-['Oswald'] text-xl font-bold uppercase text-slate-600">
           Hazard Data
-=======
-        <div className='h-12 pl-3 pr-2 flex items-center '>
-          <MNYLogo height={50} width={190} color={'#37576b'}/>
->>>>>>> 064c81cac760660774542daeaaf54ff28af6ab6c
         </div>  
       </Link>
     </>
@@ -108,25 +103,6 @@ const theme = {
     2: '',
     3: ''
   },
-<<<<<<< HEAD
-  
-=======
-  lexical: {
-    editorShell: "font-['Proxima_Nova'] font-[400] text-[16px] text-[#37576B] leading-[22.4px]",
-    heading: {
-      h1: "font-[500]  text-[#2D3E4C] text-[36px] leading-[36px] tracking-[-.02em] font-[500] underline-offset-8 underline decoration-4 decoration-[#EAAD43] uppercase font-['Oswald'] pb-[12px]", //'PlaygroundEditorTheme__h1',
-      h2: "font-[500]  text-[#2D3E4C] text-[24px] leading-[24px] scroll-mt-36 font-['Oswald'] pb-[12x]", //'PlaygroundEditorTheme__h2',
-      h3: "font-[500]  text-[#2D3E4C] text-[16px] leading-[16px] scroll-mt-36 font-['Oswald'] pb-[12x]", //'PlaygroundEditorTheme__h3',
-      h4: "font-medium text-[#2D3E4C] scroll-mt-36 font-display", //'PlaygroundEditorTheme__h4',
-      h5: "scroll-mt-36 font-display", //'PlaygroundEditorTheme__h5',
-      h6: "scroll-mt-36 font-display", //'PlaygroundEditorTheme__h6',
-    },
-    paragraph: "m-0 relative", //'PlaygroundEditorTheme__paragraph',
-    quote:
-    "m-0 mb-2 font-['Oswald'] text-[30px] leading-[36px] text-[#2D3E4C] border-l-4 border-[#37576B] pl-4 pb-[12px]", //'PlaygroundEditorTheme__quote',
-
-  },
->>>>>>> 064c81cac760660774542daeaaf54ff28af6ab6c
   dataCard: {
     columnControlWrapper: 'grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-x-1 gap-y-0.5',
     columnControlHeaderWrapper: `px-1 font-semibold border bg-gray-50 text-gray-500`,

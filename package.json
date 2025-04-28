@@ -23,7 +23,6 @@
     ]
   },
   "dependencies": {
-    "@availabs/dms": "^0.0.61",
     "@availabs/ams": "^2.0.6",
     "@availabs/avl-falcor": "^0.0.3",
     "@availabs/dms": "^0.0.61",
@@ -31,6 +30,7 @@
     "@heroicons/react": "^2.0.17",
     "@nivo/bar": "^0.83.0",
     "@reduxjs/toolkit": "^1.9.5",
+    "@turf/bbox": "^7.2.0",
     "@turf/centroid": "^7.1.0",
     "@turf/union": "^7.1.0",
     "colorbrewer": "^1.5.3",
