@@ -46,18 +46,19 @@ function App() {
         defaultData={siteData}
         authWrapper={withAuth}
         themes={themes}
-        // API_HOST='http://localhost:4444'
+        damaBaseUrl={'/datasets'}
+          // API_HOST='http://localhost:4444'
         
         routes={[
           //cenrep
-          ...DamaRoutes({
+          ...LayoutWrapper(DamaRoutes({
               baseUrl:'/datasets',
               defaultPgEnv : "hazmit_dama",
               //navSettings: authMenuConfig,
               dataTypes: hazmitDataTypes,
               useFalcor,
               useAuth
-            }),
+            })),
           // Auth
           ...Auth
         ]} 
