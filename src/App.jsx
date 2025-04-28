@@ -16,7 +16,7 @@ import LayoutWrapper from "~/layout/LayoutWrapper"
 
 
 import CustomComponents from "~/additional_components";
-import { DamaMap } from '~/pages/DataManager'
+import { DamaMap, Map } from '~/pages/DataManager'
 import siteData from './siteData.json'
 
 // import BuildingFootprintsDownload from "./buildings_download"
@@ -26,6 +26,7 @@ import siteData from './siteData.json'
 registerDataType("selector", Selector)
 registerComponents({
   "Map: Dama Map": DamaMap,
+  "Map": Map,
 })
 
 Auth.forEach(f => {

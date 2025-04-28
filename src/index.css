@@ -70,34 +70,3 @@ input {
 }
 
 
-@font-face{
-    font-family:'Oswald';
-    src:url(https://www.ny.gov/sites/all/themes/ny_gov/fonts/oswald-light-webfont.eot);
-    src:url(https://www.ny.gov/sites/all/themes/ny_gov/fonts/oswald-light-webfont.eot?#iefix) format("embedded-opentype"),
-      url(https://www.ny.gov/sites/all/themes/ny_gov/fonts/oswald-light-webfont.woff) format("woff"),
-      url(https://www.ny.gov/sites/all/themes/ny_gov/fonts/oswald-light-webfont.ttf) format("truetype"),
-      url(https://www.ny.gov/sites/all/themes/ny_gov/fonts/oswald-light-webfont.svg#oswaldlight) format("svg");
-    font-weight:100;
-    font-style:normal
-}
-@font-face{
-    font-family:'Oswald';
-    src:url(https://www.ny.gov/sites/all/themes/ny_gov/fonts/oswald-bold-webfont.eot);
-    src:url(https://www.ny.gov/sites/all/themes/ny_gov/fonts/oswald-bold-webfont.eot?#iefix) format("embedded-opentype"),
-      url(https://www.ny.gov/sites/all/themes/ny_gov/fonts/oswald-bold-webfont.woff) format("woff"),
-      url(https://www.ny.gov/sites/all/themes/ny_gov/fonts/oswald-bold-webfont.ttf) format("truetype"),
-      url(https://www.ny.gov/sites/all/themes/ny_gov/fonts/oswald-bold-webfont.svg#oswaldbold) format("svg");
-    font-weight:700;
-    font-style:normal
-}
-@font-face{
-    font-family:'Oswald';
-    src:url(https://www.ny.gov/sites/all/themes/ny_gov/fonts/oswald-regular-webfont.eot);
-    src:url(https://www.ny.gov/sites/all/themes/ny_gov/fonts/oswald-regular-webfont.eot?#iefix) format("embedded-opentype"),
-      url(https://www.ny.gov/sites/all/themes/ny_gov/fonts/oswald-regular-webfont.woff) format("woff"),
-      url(https://www.ny.gov/sites/all/themes/ny_gov/fonts/oswald-regular-webfont.ttf) format("truetype"),
-
-      url(https://www.ny.gov/sites/all/themes/ny_gov/fonts/oswald-regular-webfont.svg#oswaldbook) format("svg");
-    font-weight:400;
-    font-style:normal
-}

@@ -1,9 +1,8 @@
 import CountyHeader from "./CountyHeader.jsx";
-import DownloadComponent from "./DownloadComponent";
+//import Fusionheader from "./fusion_header.jsx";
 
 const components = {
-	"Header: County Header II": CountyHeader,
-	"Header: Download Component": DownloadComponent
+	"Header: Fusion Header": CountyHeader,
 }
 
 export default components
