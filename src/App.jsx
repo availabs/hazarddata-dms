@@ -50,14 +50,14 @@ function App() {
         
         routes={[
           //cenrep
-          ...DamaRoutes({
+          ...LayoutWrapper(DamaRoutes({
               baseUrl:'/datasets',
               defaultPgEnv : "hazmit_dama",
               //navSettings: authMenuConfig,
               dataTypes: hazmitDataTypes,
               useFalcor,
               useAuth
-            }),
+            })),
           // Auth
           ...Auth
         ]} 
