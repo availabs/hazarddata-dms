@@ -17,13 +17,13 @@ const MNYLogo = ({color='#5d87a1', width=175,height=50}) => (
 const Logo = ({sideNav}) => {
 
   return (
-      <>
-        <Link to="/" className={`flex `}>
-          <div className='h-12 pl-3 pr-2 flex items-center '>
-            <MNYLogo height={50} width={190} color={'#37576b'}/>
-          </div>
-        </Link>
-      </>
+    <>
+      <Link to="/" className={`flex `}>
+        <div className="h-12 px-4 flex items-center font-['Oswald'] text-xl font-bold uppercase text-slate-600">
+          Hazard Data
+        </div>
+      </Link>
+    </>
   )
 }
 
