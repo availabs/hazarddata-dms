@@ -4,7 +4,7 @@ import Select from '../../../../ui/components/select/'
 import {isJson} from "../index";
 import {PageContext} from "../../../../pages/view";
 import {ArrowRight} from "../../../icons";
-import {Link} from "react-router-dom";
+import {Link} from "react-router";
 import RenderSwitch from "../dataWrapper/components/Switch";
 
 const overlayImageOptions = [

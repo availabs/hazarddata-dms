@@ -1,5 +1,5 @@
 import MNYLogo from './mny-logo'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 const Logo = ({sideNav}) => {
 	// const theme = useTheme()

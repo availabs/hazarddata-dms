@@ -38,7 +38,7 @@ function App() {
     return (
       <DmsSite
         dmsConfig = {
-          adminConfig({
+          adminConfig[0]({
             app: 'dms-site',
             type: 'prod'
           })

@@ -1,6 +1,6 @@
 import mnyv1 from './mnyv1'
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 const MNYLogo = ({color='#5d87a1', width=175,height=50}) => (
   
